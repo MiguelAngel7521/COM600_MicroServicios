@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Candidatos</title>
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/candidatos/nuevo">Nuevo Candidato</a> |
+        <a href="/cargos">Cargos</a> |
+        <a href="/lugares">Lugares</a>
+    </nav>
+    <h1>Lista de Candidatos</h1>
+    <a href="/candidatos/nuevo">Agregar candidato</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>CI</th>
+                <th>Nombres</th>
+                <th>Apellido 1</th>
+                <th>Apellido 2</th>
+                <th>Cargo</th>
+                <th>Lugar</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% candidatos.forEach(candidato => { %>
+                <tr>
+                    <td><%= candidato.ci %></td>
+                    <td><%= candidato.nombres %></td>
+                    <td><%= candidato.apellido1 %></td>
+                    <td><%= candidato.apellido2 %></td>
+                    <td><%= candidato.cargo.nombre %></td>
+                    <td><%= candidato.lugar.nombre %></td>
+                    <td>
+                        <a href="/candidatos/editar/<%= candidato.ci %>">Editar</a> |
+                        <a href="/candidatos/eliminar/<%= candidato.ci %>">Eliminar</a>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title><%= candidato ? 'Editar Candidato' : 'Nuevo Candidato' %></title>
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/candidatos/nuevo">Nuevo Candidato</a> |
+        <a href="/cargos">Cargos</a> |
+        <a href="/lugares">Lugares</a>
+    </nav>
+    <h1><%= candidato ? 'Editar Candidato' : 'Nuevo Candidato' %></h1>
+    <form method="POST" action="<%= candidato ? '/candidatos/editar/' + candidato.ci : '/candidatos' %>">
+        <label for="ci">CI:</label>
+        <input type="text" id="ci" name="ci" maxlength="12" value="<%= candidato ? candidato.ci : '' %>" <%= candidato ? 'readonly' : 'required' %>>
+        <br>
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" name="nombres" maxlength="60" value="<%= candidato ? candidato.nombres : '' %>" required>
+        <br>
+        <label for="apellido1">Apellido 1:</label>
+        <input type="text" id="apellido1" name="apellido1" maxlength="30" value="<%= candidato ? candidato.apellido1 : '' %>" required>
+        <br>
+        <label for="apellido2">Apellido 2:</label>
+        <input type="text" id="apellido2" name="apellido2" maxlength="40" value="<%= candidato ? candidato.apellido2 : '' %>" required>
+        <br>
+        <label for="cargo_id">Cargo:</label>
+        <select id="cargo_id" name="cargo_id" required>
+            <option value="">Seleccione un cargo</option>
+            <% cargos.forEach(cargo => { %>
+                <option value="<%= cargo.id %>" <%= candidato && candidato.cargo.id === cargo.id ? 'selected' : '' %>><%= cargo.nombre %></option>
+            <% }); %>
+        </select>
+        <br>
+        <label for="lugar_id">Lugar:</label>
+        <select id="lugar_id" name="lugar_id" required>
+            <option value="">Seleccione un lugar</option>
+            <% lugares.forEach(lugar => { %>
+                <option value="<%= lugar.id %>" <%= candidato && candidato.lugar.id === lugar.id ? 'selected' : '' %>><%= lugar.nombre %></option>
+            <% }); %>
+        </select>
+        <br>
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>

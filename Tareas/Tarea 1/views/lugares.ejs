@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lugares</title>
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/candidatos/nuevo">Nuevo Candidato</a> |
+        <a href="/cargos">Cargos</a> |
+        <a href="/lugares">Lugares</a>
+    </nav>
+    <h1>Lista de Lugares</h1>
+    <form method="POST" action="/lugares">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" maxlength="50" required>
+        <button type="submit">Agregar lugar</button>
+    </form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% lugares.forEach(lugar => { %>
+                <tr>
+                    <td><%= lugar.id %></td>
+                    <td><%= lugar.nombre %></td>
+                    <td>
+                        <a href="/lugares/editar/<%= lugar.id %>">Editar</a> |
+                        <a href="/lugares/eliminar/<%= lugar.id %>">Eliminar</a>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>
