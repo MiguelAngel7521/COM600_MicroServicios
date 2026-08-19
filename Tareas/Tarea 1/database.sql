@@ -1,0 +1,25 @@
+CREATE DATABASE IF NOT EXISTS candidatos;
+USE candidatos;
+
+CREATE TABLE IF NOT EXISTS cargos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS lugar (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS candidatos (
+  ci VARCHAR(12) PRIMARY KEY,
+  nombres VARCHAR(60) NOT NULL,
+  apellido1 VARCHAR(30) NOT NULL,
+  apellido2 VARCHAR(40) NOT NULL,
+  cargo_id INT NOT NULL,
+  lugar_id INT NOT NULL,
+  CONSTRAINT fk_candidatos_cargo
+    FOREIGN KEY (cargo_id) REFERENCES cargos(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_candidatos_lugar
+    FOREIGN KEY (lugar_id) REFERENCES lugar(id) ON DELETE RESTRICT
+);

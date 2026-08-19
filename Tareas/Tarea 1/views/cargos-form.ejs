@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Cargo</title>
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/cargos">Cargos</a> |
+        <a href="/lugares">Lugares</a>
+    </nav>
+    <h1>Editar Cargo</h1>
+    <form method="POST" action="/cargos/editar/<%= cargo.id %>">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" maxlength="50" value="<%= cargo.nombre %>" required>
+        <br>
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>
