@@ -1,0 +1,91 @@
+<h1>Tres en Raya</h1>
+
+<p id="jugador"></p>
+<p id="mensaje"></p>
+
+<button id="reiniciar">Nueva partida</button>
+<div id="tablero"></div>
+
+<style> 
+body { 
+  font-family: Arial, sans-serif; 
+  text-align: center; 
+  margin-top: 50px; 
+} 
+#tablero { 
+  display: grid; 
+  grid-template-columns: repeat(3, 60px); 
+  gap: 5px; width: 180px; 
+  margin: 0 auto; 
+}
+
+#tablero button {
+width: 60px;
+height: 60px;
+font-size: 30px;
+}
+#reiniciar {
+margin-bottom: 20px;
+padding: 10px 20px;
+font-size: 16px;
+color:blueviolet;
+background-color: lightgray;
+border: 1px solid rgb(52, 0, 62);
+border-radius: 15px;
+}
+</style>
+
+<script>
+const socket = new WebSocket('ws://localhost:8080');
+
+const jugadorTexto = document.getElementById('jugador');
+const mensaje = document.getElementById('mensaje');
+const tableroElemento = document.getElementById('tablero');
+const botonReiniciar = document.getElementById('reiniciar');
+
+botonReiniciar.onclick = () => {
+  socket.send(JSON.stringify({
+    tipo: 'reiniciar'
+  }));
+};
+
+socket.onmessage = (evento) => {
+  const datos = JSON.parse(evento.data);
+
+  if (datos.error) {
+    mensaje.textContent = datos.error;
+    return;
+  }
+
+  if (datos.jugador) {
+    jugadorTexto.textContent = `Eres el jugador ${datos.jugador}`;
+  }
+
+  tableroElemento.innerHTML = '';
+
+  datos.tablero.forEach((valor, casilla) => {
+    const boton = document.createElement('button');
+
+    boton.textContent = valor;
+    boton.disabled = valor !== '' || datos.ganador;
+
+    boton.onclick = () => {
+      socket.send(JSON.stringify({ casilla }));
+    };
+
+    tableroElemento.appendChild(boton);
+  });
+
+  if (datos.ganador === 'Empate') {
+    mensaje.textContent = '¡Empate!';
+  } else if (datos.ganador) {
+    mensaje.textContent = `¡Ganó el jugador ${datos.ganador}!`;
+  } else {
+    mensaje.textContent = `Turno del jugador ${datos.turno}`;
+  }
+};
+
+socket.onclose = () => {
+  mensaje.textContent = 'Conexión cerrada.';
+};
+</script>
