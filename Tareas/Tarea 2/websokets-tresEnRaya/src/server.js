@@ -65,6 +65,7 @@ servidor.on('connection', (ws) => {
 
     if (ganador) return;
 
+    //no es el turno del jugador
     if (jugadores.get(ws) !== turno) {
       ws.send(JSON.stringify({
         error: 'No es tu turno.'
@@ -72,6 +73,7 @@ servidor.on('connection', (ws) => {
       return;
     }
 
+    //casilla ocupada
     if (tablero[casilla] !== '') {
       ws.send(JSON.stringify({
         error: 'Casilla ocupada.'

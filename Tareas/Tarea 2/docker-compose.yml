@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: ./cliente_websocket_tresEnRaya
+      dockerfile: dockerfile
+    volumes:
+      - ./cliente_websocket_tresEnRaya:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    command: npm run dev
+
+  websocket:
+    build:
+      context: ./websokets-tresEnRaya
+      dockerfile: dockerfile
+    ports:
+      - "8080:8080"
+    command: npm start
