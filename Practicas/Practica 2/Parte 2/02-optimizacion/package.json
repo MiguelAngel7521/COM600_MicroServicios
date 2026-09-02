@@ -1,0 +1,12 @@
+{
+  "name": "comparacion-imagenes",
+  "version": "1.0.0",
+  "description": "Aplicacion para comparar un Dockerfile original y uno optimizado",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "4.19.2"
+  }
+}

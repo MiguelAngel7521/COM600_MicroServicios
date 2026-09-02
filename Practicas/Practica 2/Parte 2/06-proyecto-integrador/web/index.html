@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Biblioteca COM-600</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 3rem auto; padding: 0 1rem; color: #1e293b; }
+    form { display: grid; grid-template-columns: 1fr 1fr auto; gap: .75rem; margin: 1.5rem 0; }
+    input, button { padding: .75rem; font: inherit; }
+    button { color: white; background: #2563eb; border: 0; border-radius: .4rem; cursor: pointer; }
+    li { padding: .65rem 0; border-bottom: 1px solid #e2e8f0; }
+    .estado { color: #047857; }
+  </style>
+</head>
+<body>
+  <h1>Biblioteca COM-600</h1>
+  <p class="estado" id="estado">Consultando el catálogo…</p>
+  <form id="formulario">
+    <input id="titulo" placeholder="Título" required>
+    <input id="autor" placeholder="Autor" required>
+    <button type="submit">Agregar</button>
+  </form>
+  <ul id="libros"></ul>
+  <script>
+    const lista = document.querySelector('#libros');
+    const estado = document.querySelector('#estado');
+
+    async function cargar() {
+      const respuesta = await fetch('/api/libros');
+      const libros = await respuesta.json();
+      lista.innerHTML = libros.map((libro) =>
+        `<li><strong>${libro.titulo}</strong> — ${libro.autor} (${libro.disponible ? 'disponible' : 'prestado'})</li>`
+      ).join('');
+      estado.textContent = `${libros.length} libro(s) registrado(s)`;
+    }
+
+    document.querySelector('#formulario').addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      await fetch('/api/libros', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          titulo: document.querySelector('#titulo').value,
+          autor: document.querySelector('#autor').value
+        })
+      });
+      evento.target.reset();
+      await cargar();
+    });
+
+    cargar().catch(() => { estado.textContent = 'No se pudo consultar la API'; });
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+services:
+  api:
+    build: ./api
+    ports:
+      - "${API_PORT:-3003}:3000"
+    environment:
+      PORT: 3000
+      MONGO_URL: mongodb://mongo:27017/${MONGO_DB:-redesdb}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - red_frontal
+      - red_datos
+
+  mongo:
+    image: mongo:7
+    volumes:
+      - datos_mongo:/data/db
+    networks:
+      - red_datos
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  proxy:
+    image: nginx:1.27-alpine
+    ports:
+      - "${PROXY_PORT:-8084}:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+    networks:
+      - red_frontal
+
+volumes:
+  datos_mongo:
+
+networks:
+  red_frontal:
+    driver: bridge
+  red_datos:
+    driver: bridge
+    internal: true

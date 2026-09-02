@@ -1,0 +1,18 @@
+# Variante pequeña de Node 20; evita depender de la etiqueta por defecto.
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Crea en una sola capa el grupo y el usuario sin privilegios.
+RUN addgroup -S app && adduser -S app -G app
+
+# Las dependencias cambian menos que el código y aprovechan mejor la caché.
+COPY package*.json ./
+RUN npm install --omit=dev && npm cache clean --force
+
+# El código se copia después y queda bajo propiedad del usuario de la aplicación.
+COPY --chown=app:app . .
+
+USER app
+EXPOSE 3000
+CMD ["node", "app.js"]

@@ -1,0 +1,36 @@
+services:
+  api:
+    build: ./api
+    ports:
+      - "${API_PORT:-3002}:3000"
+    environment:
+      PORT: 3000
+      MONGO_URL: mongodb://mongo:27017/${MONGO_DB:-tareasdb}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - red_datos
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    volumes:
+      - datos_mongo:/data/db
+    networks:
+      - red_datos
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  datos_mongo:
+    name: ${MONGO_VOLUME:-parte2_ej3_datos_mongo}
+
+networks:
+  red_datos:
+    driver: bridge
