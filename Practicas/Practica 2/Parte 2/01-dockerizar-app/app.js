@@ -24,7 +24,7 @@ const server = http.createServer((req, res) => {
   if (req.url === '/') {
     res.writeHead(200);
     return res.end(JSON.stringify({
-      mensaje: 'Aplicacion propia de Miguel Rodriguez',
+      mensaje: 'Aplicacion',
       host: os.hostname(),
       endpoints: ['/', '/salud', '/materias']
     }));

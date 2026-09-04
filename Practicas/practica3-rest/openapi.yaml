@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: API de Usuarios
+  version: 1.0.0
+  description: API REST para gestionar usuarios
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /v1/usuarios:
+    get:
+      summary: Lista todos los usuarios
+      responses:
+        "200":
+          description: Lista de usuarios
+
+    post:
+      summary: Crea un usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioEntrada"
+            example:
+              nombre: Ana Torres
+              correo: ana@usfx.bo
+              edad: 22
+      responses:
+        "201":
+          description: Usuario creado correctamente
+        "400":
+          description: Datos inválidos
+        "409":
+          description: El correo ya está registrado
+
+  /v1/usuarios/{id}:
+    get:
+      summary: Obtiene un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario encontrado
+        "404":
+          description: Usuario no encontrado
+
+    put:
+      summary: Reemplaza un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioEntrada"
+      responses:
+        "200":
+          description: Usuario actualizado
+        "400":
+          description: Datos inválidos
+        "404":
+          description: Usuario no encontrado
+
+    delete:
+      summary: Elimina un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Usuario eliminado
+        "404":
+          description: Usuario no encontrado
+
+components:
+  schemas:
+    UsuarioEntrada:
+      type: object
+      required:
+        - nombre
+        - correo
+        - edad
+      properties:
+        nombre:
+          type: string
+          minLength: 3
+        correo:
+          type: string
+          format: email
+        edad:
+          type: integer
+          minimum: 1
+          maximum: 120

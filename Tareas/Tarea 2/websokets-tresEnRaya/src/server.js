@@ -35,7 +35,7 @@ function enviarEstado() {
     }));
   });
 }
-
+d
 servidor.on('connection', (ws) => {
   if (jugadores.size >= 2) {
     ws.send(JSON.stringify({
