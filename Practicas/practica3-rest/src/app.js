@@ -10,8 +10,8 @@ const app = express();
 
 app.use(express.json());
 // antes:
-//app.use("/usuarios", router);
-app.use("/v1/usuarios", router);
+app.use("/usuarios", router);
+//app.use("/v1/usuarios", router);
 
 
 app.get("/salud", (_req, res) => res.json({ estado: "arriba" }));

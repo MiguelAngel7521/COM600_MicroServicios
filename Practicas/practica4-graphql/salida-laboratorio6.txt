@@ -1,0 +1,41 @@
+GraphQL escuchando en http://localhost:4000/
+[GraphQL] {
+  message: "'' exceeds maximum operation depth of 0",
+  locations: [ { line: 1, column: 18 } ],
+  extensions: {
+    code: 'GRAPHQL_VALIDATION_FAILED',
+    stacktrace: [
+      "GraphQLError: '' exceeds maximum operation depth of 0",
+      '    at determineDepth (/home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:56:7)',
+      '    at /home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:69:9',
+      '    at Array.map (<anonymous>)',
+      '    at determineDepth (/home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:68:59)',
+      '    at /home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:77:9',
+      '    at Array.map (<anonymous>)',
+      '    at determineDepth (/home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:76:55)',
+      '    at /home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:22:27',
+      '    at /home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql/validation/validate.js:156:25',
+      '    at Array.map (<anonymous>)'
+    ]
+  }
+}
+[GraphQL] {
+  message: "'' exceeds maximum operation depth of 0",
+  locations: [ { line: 1, column: 24 } ],
+  extensions: {
+    code: 'GRAPHQL_VALIDATION_FAILED',
+    stacktrace: [
+      "GraphQLError: '' exceeds maximum operation depth of 0",
+      '    at determineDepth (/home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:56:7)',
+      '    at /home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:69:9',
+      '    at Array.map (<anonymous>)',
+      '    at determineDepth (/home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:68:59)',
+      '    at /home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:77:9',
+      '    at Array.map (<anonymous>)',
+      '    at determineDepth (/home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:76:55)',
+      '    at /home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql-depth-limit/index.js:22:27',
+      '    at /home/angel77/Universidad/02_2026/Ingenieria de Sistema/MICRO SERVICIOS/COM600_MicroServicios/Practicas/practica4-graphql/node_modules/graphql/validation/validate.js:156:25',
+      '    at Array.map (<anonymous>)'
+    ]
+  }
+}

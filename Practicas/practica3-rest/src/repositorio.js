@@ -26,11 +26,24 @@ async function listar(filtro, orden, pagina, limite) {
   return { datos, total };
 }
 
+async function obtener(id) {
+  const oid = aId(id);
+  if (oid) {
+    const found = await coleccion.findOne({ _id: oid });
+    if (found) return found;
+  }
+  const num = Number(id);
+  if (!isNaN(num)) {
+    return coleccion.findOne({ numero: num });
+  }
+  return null;
+}
+
 module.exports = {
   conectar,
   listar,
   crear: usuario => coleccion.insertOne(usuario),
-  obtener: id => (aId(id) ? coleccion.findOne({ _id: aId(id) }) : null),
+  obtener,
   reemplazar: (id, usuario) =>
     aId(id)
       ? coleccion.replaceOne({ _id: aId(id) }, usuario)
