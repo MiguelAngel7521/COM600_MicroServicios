@@ -1,0 +1,34 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - red-interna
+    environment:
+      MONGO_URL: mongodb://mongo:27017/tarea3
+      MONGO_DB: tarea3
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    image: mongo:7
+    networks:
+      - red-interna
+    volumes:
+      - datos-tarea3:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  datos-tarea3:
+
+networks:
+  red-interna:
+    internal: true

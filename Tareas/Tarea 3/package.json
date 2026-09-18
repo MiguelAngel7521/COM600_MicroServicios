@@ -1,0 +1,19 @@
+{
+  "name": "tarea-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --check src/servidor.js && node --check src/graphql.js",
+    "dev": "node src/servidor.js",
+    "start": "node src/servidor.js"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "graphql": "^16.11.0",
+    "graphql-http": "^1.22.4",
+    "mongoose": "^7.3.4"
+  }
+}

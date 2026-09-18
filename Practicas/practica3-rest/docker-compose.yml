@@ -13,6 +13,6 @@ services:
     image: mongo:7
     volumes:
       - datos-practica3:/data/db
-
+s
 volumes:
   datos-practica3:
