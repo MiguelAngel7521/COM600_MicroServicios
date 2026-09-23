@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Guía para exponer Python full stack, con REST, FastAPI y GraphQL explicados desde cero.">
+<title>Python full stack · Aprende, ejecuta, explica</title>
+<style>
+:root{--ink:#142e40;--muted:#506477;--paper:#f5f7fa;--line:#d9e2e9;--green:#006a58;--light:#e3f4ec;--orange:#aa500e;--code:#102637;--white:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:28px}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.7 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--green);text-underline-offset:3px}button,a,input{touch-action:manipulation}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #c8791b;outline-offset:4px}.skip{position:absolute;left:10px;top:-90px;background:white;padding:12px;z-index:20}.skip:focus{top:10px}
+aside{position:fixed;inset:0 auto 0 0;width:250px;background:#fff;border-right:1px solid var(--line);padding:28px 24px;overflow:auto}.brand{font-weight:800;font-size:23px;letter-spacing:-1px}.brand span{color:var(--green)}.course{font-size:12px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);margin-top:3px}nav{margin-top:30px}nav a{display:block;text-decoration:none;font-size:14px;padding:9px 10px;border-radius:6px;color:var(--muted);margin:2px 0}nav a:hover,nav a.active{background:var(--light);color:var(--green)}.nav-note{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px;margin-top:26px}
+main{max-width:1350px;margin-left:250px;padding:44px clamp(24px,5vw,76px) 90px}.hero{border-bottom:1px solid var(--line);padding:20px 0 38px;margin-bottom:38px}.eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:800;color:var(--green)}h1{font-size:clamp(40px,5.4vw,72px);line-height:1.04;letter-spacing:-2.5px;margin:20px 0}h1 em{font-style:normal;color:var(--green)}.lead{font-size:21px;max-width:750px;color:var(--muted)}.tags{display:flex;flex-wrap:wrap;gap:8px;margin:25px 0}.tag{font-size:12px;font-weight:750;border:1px solid var(--line);border-radius:30px;padding:5px 12px;background:white}.actions{display:flex;flex-wrap:wrap;gap:10px}.btn{display:inline-block;padding:10px 18px;border-radius:8px;border:1px solid var(--line);background:white;color:var(--ink);font-size:14px;font-weight:700;text-decoration:none}.btn.primary{background:var(--green);color:white;border-color:var(--green)}
+section{margin:0 0 62px;scroll-margin-top:25px}h2{font-size:clamp(26px,3vw,36px);line-height:1.2;letter-spacing:-.8px;margin:9px 0 22px}h3{font-size:21px;line-height:1.35;margin:28px 0 12px}h4{font-size:17px;margin:10px 0}p{margin:12px 0}.number{color:var(--green);font-size:12px;font-weight:850;letter-spacing:2px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid.two{grid-template-columns:repeat(2,1fr)}.card{background:white;border:1px solid var(--line);padding:22px;border-radius:13px}.card p{font-size:15px}.card .big{font-size:28px;font-weight:800;line-height:1.2}.callout{border-left:4px solid var(--green);background:var(--light);padding:17px 22px;border-radius:0 9px 9px 0;margin:22px 0}.callout.warn{border-color:#ba6c1d;background:#fff2dc}.say{border-left:3px solid var(--green);padding:8px 0 8px 20px;font-size:20px;margin:22px 0;color:#255246}.muted{color:var(--muted)}small{font-size:13px}ul,ol{padding-left:24px}li{margin:8px 0}
+code{font: .9em/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;background:#e8eef3;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{position:relative;background:var(--code);color:#e4f3ff;border-radius:10px;padding:24px;overflow:auto;font:14px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4;max-width:100%;margin:12px 0 20px}pre code{background:none;color:inherit;padding:0;font:inherit;overflow-wrap:normal}pre.with-copy{padding-top:52px}.copy{position:absolute;right:10px;top:10px;border:1px solid #587387;color:#e4f3ff;background:#203c50;border-radius:5px;font-size:12px;padding:4px 10px}.code-title{margin-top:25px;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}.table-wrap{overflow:auto;margin:15px 0 25px;border:1px solid var(--line);border-radius:10px;background:white}table{border-collapse:collapse;width:100%;font-size:15px}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--line)}th{background:#eaf0f4;font-size:12px;letter-spacing:.5px;text-transform:uppercase}tr:last-child td{border:0}.method{font:bold 12px ui-monospace,monospace;border-radius:4px;padding:4px 7px;background:#e3f4ec;color:#00604a}.post{background:#e4ecff;color:#244698}.put{background:#fff0d8;color:#885000}.delete{background:#fce7e9;color:#a12b39}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:12px;margin:24px 0}.flow .card{text-align:center}.arrow{color:var(--green);font-size:25px;font-weight:800}.flow small{display:block}.steps{counter-reset:paso}.step{position:relative;padding:4px 0 15px 50px}.step:before{counter-increment:paso;content:counter(paso);position:absolute;left:0;top:7px;background:var(--green);color:white;font-size:13px;font-weight:bold;width:30px;height:30px;display:grid;place-items:center;border-radius:50%}.step h3{margin:0 0 10px}details{background:white;border:1px solid var(--line);border-radius:9px;padding:15px 19px;margin:12px 0}summary{cursor:pointer;font-weight:750}details p:last-child{margin-bottom:0}.reveal{display:none}.reveal.show{display:block}.quiz{margin-top:14px}.timeline{border-left:2px solid var(--line);margin-left:7px;padding-left:25px}.timeline p strong{color:var(--green)}.progress{position:fixed;top:0;left:250px;right:0;height:4px;background:#dbe9e3;z-index:9}.progress div{height:100%;width:0;background:var(--green)}footer{padding-top:30px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}body.present aside{display:none}body.present main{margin:0 auto;max-width:1200px;font-size:20px}body.present .progress{left:0}body.present section{border-bottom:1px solid var(--line);padding-bottom:45px}body.present pre{font-size:17px}
+.grid>*,.flow>*{min-width:0}
+@media(min-width:1650px){main{margin-left:max(250px,calc((100vw - 1400px)/2 + 210px))}}
+@media(max-width:1000px){aside{width:205px;padding:24px 15px}main{margin-left:205px;padding:30px}.progress{left:205px}.grid{grid-template-columns:1fr}.grid.two{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.arrow{text-align:center;transform:rotate(90deg)}}
+@media(max-width:700px){aside{position:static;width:auto;border-right:0;border-bottom:1px solid var(--line);padding:18px 20px}nav{display:flex;overflow:auto;margin-top:13px;gap:4px}nav a{white-space:nowrap}.nav-note{display:none}main{margin:0;padding:26px 18px}.progress{left:0}h1{letter-spacing:-1.5px}.hero{padding-top:0}.lead{font-size:18px}.step{padding-left:40px}pre{font-size:12px;padding:16px}.card{padding:18px}.table-wrap{font-size:14px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{aside,.progress,.actions,.copy,.quiz button,.skip{display:none!important}body,main{background:white;color:black;font-size:11pt!important}main{margin:0!important;padding:0;max-width:none}.hero{padding:0}h1{font-size:32pt}h2{font-size:22pt}h3{font-size:15pt}section{margin-bottom:28px;break-before:auto}.card,details,pre,table,.callout{break-inside:avoid}pre{white-space:pre-wrap;overflow:visible;background:#f0f3f5;color:black;font-size:8pt;padding:12px!important}pre code{color:black}a{color:black}summary{list-style:none}.grid{grid-template-columns:1fr}.grid.two{grid-template-columns:1fr}.reveal{display:block}footer{font-size:9pt}}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="progress" aria-hidden="true"><div id="barra"></div></div>
+<aside>
+  <div class="brand">Python<span> / </span>Full stack</div>
+  <div class="course">COM-600 · Guía de exposición</div>
+  <nav aria-label="Contenido">
+    <a href="#mapa">01 · La idea completa</a>
+    <a href="#rest">02 · Entender REST</a>
+    <a href="#librerias">03 · Las librerías</a>
+    <a href="#terminales">04 · Encender los ejemplos</a>
+    <a href="#codigo">05 · Explicar el código REST</a>
+    <a href="#practica">06 · Demostración REST</a>
+    <a href="#frontend">07 · Frontend → Python</a>
+    <a href="#graphql">08 · GraphQL sin complicarse</a>
+    <a href="#comparacion">09 · Comparar los dos</a>
+    <a href="#exponer">10 · Tu guion para exponer</a>
+    <a href="#repaso">11 · Preguntas y errores</a>
+    <a href="#fuentes">12 · Material y fuentes</a>
+  </nav>
+  <p class="nav-note">Estudia primero 01–06.<br>La parte principal es REST.<br><br>El mismo recurso en ambos ejemplos: <strong>Empleado</strong>.</p>
+</aside>
+<main id="contenido">
+<header class="hero">
+  <span class="eyebrow">De entender el flujo a explicar el código</span>
+  <h1>Python full stack.<br><em>REST, paso a paso.</em></h1>
+  <p class="lead">Una guía para aprender qué ocurre entre un clic y una respuesta del servidor. Con código ejecutable, comandos para tus terminales y una comparación sencilla con GraphQL.</p>
+  <div class="tags"><span class="tag">FastAPI + Pydantic</span><span class="tag">REST · CRUD completo</span><span class="tag">GraphQL · Strawberry</span><span class="tag">Basado en tu PDF</span></div>
+  <div class="actions"><a class="btn primary" href="#terminales">Quiero ejecutarlo</a><a class="btn" href="#codigo">Quiero entender el código</a><button class="btn" id="presentar" aria-pressed="false">Modo exposición</button><button class="btn" id="imprimir">Imprimir / guardar PDF</button></div>
+  <p><small>La guía se lee sin Internet. Para usar los botones de la demo debes encender REST. Los servidores guardan datos temporales en memoria.</small></p>
+</header>
+
+<section id="mapa">
+  <span class="number">01 / EL MAPA</span><h2>¿Qué significa Python en full stack?</h2>
+  <p><strong>Full stack</strong> significa trabajar con la parte visible de una aplicación, su lógica del servidor y sus datos. Python suele encargarse del backend. El navegador normalmente presenta HTML, aplica CSS y ejecuta JavaScript.</p>
+  <div class="grid">
+    <article class="card"><div class="big">Frontend</div><p>Lo que ve y utiliza la persona: botones, formularios y tablas.</p><small>En esta demo: HTML + JavaScript.</small></article>
+    <article class="card"><div class="big">Backend</div><p>Recibe solicitudes, valida datos y ejecuta operaciones.</p><small>En esta demo: Python + FastAPI.</small></article>
+    <article class="card"><div class="big">Datos</div><p>La información que consulta o modifica el backend.</p><small>En esta demo: memoria. En una aplicación persistente: una base de datos.</small></article>
+  </div>
+  <div class="flow" aria-label="Flujo: navegador, API Python y datos en memoria"><div class="card"><strong>Navegador</strong><small>«Mostrar empleados»</small></div><div class="arrow">→</div><div class="card"><strong>API en Python</strong><small>GET /empleados</small></div><div class="arrow">→</div><div class="card"><strong>Memoria</strong><small>Ana y Luis</small></div></div>
+  <p>La respuesta vuelve al navegador como <strong>JSON</strong>. El frontend transforma esos datos en una tabla. La API es el contrato que permite esa comunicación.</p>
+  <blockquote class="say">«Python procesa los datos en el servidor; la interfaz los solicita mediante una API y los muestra al usuario».</blockquote>
+  <h3>¿Dónde entra Reflex, el framework de tu documento?</h3>
+  <p>Reflex permite declarar la interfaz y la lógica usando Python. Genera una interfaz React y mantiene comunicación con el backend para gestionar eventos y estado. “Escribir full stack en Python” no significa que el navegador ejecute directamente tus archivos <code>.py</code>. <a href="https://reflex.dev/docs/advanced-onboarding/how-reflex-works/">Cómo funciona Reflex</a>.</p>
+  <p>Tu PDF usa la expresión “Python Flex” para referirse a <strong>Reflex</strong>. Para exponer, usa el nombre oficial Reflex. El documento menciona Next.js; es un detalle dependiente de la versión. La explicación esencial es <strong>componentes Python → frontend React + backend</strong>.</p>
+  <div class="callout"><strong>Decisión para aprender:</strong> aquí usaremos un HTML pequeño como frontend, para ver claramente las peticiones. Las APIs REST y GraphQL también podrían ser consumidas por Reflex. No necesitas instalar Reflex para ejecutar estos ejemplos.</div>
+  <h3>Relación con microservicios</h3>
+  <p>Una API REST no convierte automáticamente una aplicación en microservicios. Un monolito también puede ofrecer REST. Los microservicios separan capacidades de negocio en servicios con autonomía de despliegue y propiedad de sus datos. No hace falta una máquina física distinta por servicio.</p>
+  <p>En el diseño del PDF, Reflex puede actuar como <strong>BFF</strong> (<em>Backend for Frontend</em>): adapta datos de servicios para una interfaz. Es una decisión arquitectónica, no una obligación del framework. Esta demo es un servicio educativo de empleados mostrado con dos alternativas de API.</p>
+</section>
+
+<section id="rest">
+  <span class="number">02 / LO MÁS IMPORTANTE</span><h2>REST: recurso + método + respuesta</h2>
+  <p><strong>REST</strong> significa <em>Representational State Transfer</em>. Es un estilo arquitectónico; no es una librería ni un lenguaje. En APIs web suele utilizar HTTP para trabajar con recursos. Nuestro recurso es un <strong>empleado</strong>.</p>
+  <p>Una ruta identifica el recurso y el método expresa la operación. Un endpoint se entiende aquí como <strong>método + ruta</strong>: <code>GET /empleados</code> y <code>POST /empleados</code> hacen cosas distintas aunque compartan la URL.</p>
+  <div class="table-wrap"><table><thead><tr><th>CRUD</th><th>Método</th><th>Ruta</th><th>Acción</th><th>Éxito</th></tr></thead><tbody>
+    <tr><td>Create</td><td><span class="method post">POST</span></td><td><code>/empleados</code></td><td>Crear</td><td>201</td></tr>
+    <tr><td>Read</td><td><span class="method">GET</span></td><td><code>/empleados</code></td><td>Listar</td><td>200</td></tr>
+    <tr><td>Read</td><td><span class="method">GET</span></td><td><code>/empleados/1</code></td><td>Consultar el ID 1</td><td>200</td></tr>
+    <tr><td>Update</td><td><span class="method put">PUT</span></td><td><code>/empleados/1</code></td><td>Reemplazar los tres campos</td><td>200</td></tr>
+    <tr><td>Delete</td><td><span class="method delete">DELETE</span></td><td><code>/empleados/1</code></td><td>Eliminar</td><td>204</td></tr>
+  </tbody></table></div>
+  <h3>Desarma una petición real</h3>
+  <pre><code>POST http://127.0.0.1:8001/empleados
+Content-Type: application/json
+
+{"nombre": "Marta Ruiz", "puesto": "Analista", "salario": 6000}</code></pre>
+  <ul><li><code>POST</code>: quiero crear un recurso.</li><li><code>http</code>: protocolo; <code>127.0.0.1</code>: mi propia computadora.</li><li><code>8001</code>: puerto donde escucha REST; <code>/empleados</code>: ruta.</li><li><code>Content-Type</code>: indica que el cuerpo se envía como JSON.</li><li><strong>Cuerpo</strong>: datos de entrada. El cliente no necesita enviar el ID.</li></ul>
+  <p>El servidor valida, guarda y responde:</p>
+  <pre><code>HTTP/1.1 201 Created
+Content-Type: application/json
+
+{"nombre": "Marta Ruiz", "puesto": "Analista", "salario": 6000.0, "id": 3}</code></pre>
+  <p>El orden de las claves JSON no importa. <code>6000</code> y <code>6000.0</code> expresan aquí el mismo valor numérico.</p>
+  <h3>Cuatro palabras que debes distinguir</h3>
+  <div class="grid two"><div class="card"><h4>HTTP y JSON</h4><p><strong>HTTP</strong> define cómo intercambiar solicitudes y respuestas. <strong>JSON</strong> es un formato de datos. JSON no es una base de datos. REST puede usar otros formatos.</p></div><div class="card"><h4>Ruta y parámetro</h4><p>En <code>/empleados/{empleado_id}</code>, las llaves marcan un valor variable. Si llega <code>/empleados/1</code>, FastAPI entrega <code>empleado_id = 1</code> a la función.</p></div></div>
+  <h3>Los códigos que mostrarás en clase</h3>
+  <div class="table-wrap"><table><thead><tr><th>Código</th><th>Significado en esta demo</th></tr></thead><tbody><tr><td><strong>200</strong></td><td>Consulta o actualización correcta.</td></tr><tr><td><strong>201</strong></td><td>Se creó un empleado.</td></tr><tr><td><strong>204</strong></td><td>Se eliminó; la respuesta no lleva cuerpo.</td></tr><tr><td><strong>404</strong></td><td>El ID solicitado no existe.</td></tr><tr><td><strong>422</strong></td><td>FastAPI rechazó la entrada: campo faltante, nombre demasiado corto, salario no positivo o ID que no se puede interpretar como entero.</td></tr></tbody></table></div>
+  <details><summary>Un poco más: stateless, PUT y PATCH</summary><p><strong>Stateless</strong> significa que la petición debe aportar el contexto necesario para atenderla, sin depender de una conversación previa guardada por el servidor. No significa «prohibido almacenar empleados». Los datos del recurso sí se guardan.</p><p><strong>PUT</strong> reemplaza los campos editables completos en este ejemplo. <strong>PATCH</strong> sería una modificación parcial; no está implementado. Repetir el mismo PUT deja el mismo estado: es idempotente. Repetir POST puede crear varios empleados. DELETE es idempotente respecto al estado aunque el segundo intento responda 404.</p><p>REST incluye más principios que CRUD: separación cliente-servidor, interfaz uniforme, posibilidad de caché y capas, entre otros. Esta práctica introduce el uso habitual de recursos y HTTP; no desarrolla todas las restricciones de REST.</p></details>
+  <blockquote class="say">«Con REST identifico el recurso por su URL y expreso la acción con el método HTTP. El servidor responde con datos y un código de estado».</blockquote>
+</section>
+
+<section id="librerias">
+  <span class="number">03 / QUIÉN HACE QUÉ</span><h2>Las herramientas, sin confundir sus funciones</h2>
+  <div class="table-wrap"><table><thead><tr><th>Herramienta</th><th>Para qué sirve</th><th>Dónde la ves</th></tr></thead><tbody>
+    <tr><td><strong>Python</strong></td><td>Lenguaje con el que escribimos la lógica.</td><td>Archivos <code>.py</code>, funciones, clases y listas.</td></tr>
+    <tr><td><strong>FastAPI</strong></td><td>Framework para definir rutas y construir APIs; integra validación y genera el contrato OpenAPI.</td><td><code>FastAPI()</code>, <code>@app.get</code>, <code>HTTPException</code>.</td></tr>
+    <tr><td><strong>Pydantic</strong></td><td>Define modelos y valida entradas. <code>Field</code> añade restricciones.</td><td><code>BaseModel</code>, <code>Field(gt=0)</code>.</td></tr>
+    <tr><td><strong>Uvicorn</strong></td><td>Servidor ASGI: escucha en el puerto y ejecuta la aplicación Python.</td><td>El comando <code>python -m uvicorn</code>.</td></tr>
+    <tr><td><strong>Strawberry</strong></td><td>Construye el esquema GraphQL a partir de tipos Python y ejecuta las operaciones.</td><td><code>@strawberry.type</code>, <code>Schema</code>.</td></tr>
+    <tr><td><strong>Starlette</strong></td><td>Base web utilizada por FastAPI. Aporta utilidades como servir archivos estáticos.</td><td><code>StaticFiles</code>, importado a través de FastAPI.</td></tr>
+    <tr><td><strong>pathlib</strong></td><td>Biblioteca estándar de Python para localizar la carpeta del HTML.</td><td><code>Path(__file__).parent</code>. No se instala con pip.</td></tr>
+    <tr><td><strong>Swagger UI / GraphiQL</strong></td><td>Interfaces de navegador para explorar y probar REST / GraphQL.</td><td><code>/docs</code> y <code>/graphql</code>.</td></tr>
+    <tr><td><strong>Reflex / httpx</strong></td><td>En tu PDF: framework para la interfaz en Python / cliente para llamar a APIs desde Python.</td><td>Son contexto del documento. No se usan ni se instalan en esta demo.</td></tr>
+  </tbody></table></div>
+  <p><strong>Framework vs. librería:</strong> un framework organiza el flujo de la aplicación; una librería ofrece herramientas que utilizas. Aquí FastAPI decide qué función llamar según la petición; Pydantic valida sus datos.</p>
+  <p>En <code>requirements.txt</code> aparecen las cuatro dependencias directas. <code>strawberry-graphql[fastapi]</code> instala Strawberry con los extras para integrarse con FastAPI. Pip también resuelve dependencias internas; no hace falta importarlas todas.</p>
+  <p>Swagger UI muestra el contrato <strong>OpenAPI</strong> disponible en <code>/openapi.json</code>. OpenAPI es la descripción de la API; Swagger UI es una interfaz que la interpreta. <a href="https://fastapi.tiangolo.com/tutorial/first-steps/">Primeros pasos de FastAPI</a>.</p>
+</section>
+
+<section id="terminales">
+  <span class="number">04 / COPIAR Y EJECUTAR</span><h2>Qué poner en cada terminal</h2>
+  <p>Comandos preparados para <strong>Linux / Bash</strong> y tu carpeta actual. Necesitas Python 3.10 o superior. La instalación inicial necesita Internet.</p>
+  <h3>Preparación · solo la primera vez</h3>
+  <pre><code>cd "/home/jorge75/Miguel/Universidad/Ingenieria en Sistemas/02_2026/COM600_MicroServicios/Presentacion"
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt</code></pre>
+  <p><code>cd</code> entra a la carpeta; las comillas protegen los espacios del nombre. <code>venv</code> crea un entorno aislado. <code>pip</code> instala los paquetes de la lista. Usar <code>.venv/bin/python</code> selecciona directamente ese entorno; <strong>no necesitas activarlo</strong>.</p>
+  <p>Si ya tienes el entorno que se preparó con esta guía, pasa directamente a los servidores. <code>requirements-lock.txt</code> registra las versiones probadas; puedes usarlo en lugar de <code>requirements.txt</code> para reinstalar esas mismas versiones.</p>
+  <div class="grid two">
+    <article class="card"><span class="tag">Terminal 1 · dejar abierta</span><h3>REST · puerto 8001</h3><p>Desde la carpeta del proyecto:</p><pre><code>.venv/bin/python -m uvicorn rest_api:app --reload --host 127.0.0.1 --port 8001</code></pre><p>Abre <a href="http://127.0.0.1:8001/docs">Swagger /docs</a>, <a href="http://127.0.0.1:8001/web/">esta guía servida por Python</a> o <a href="http://127.0.0.1:8001/web/demo.html">la demo frontend</a>.</p></article>
+    <article class="card"><span class="tag">Terminal 2 · dejar abierta</span><h3>GraphQL · puerto 8002</h3><p>En otra terminal, entra a la misma carpeta con el <code>cd</code> de arriba. Después:</p><pre><code>.venv/bin/python -m uvicorn graphql_api:app --reload --host 127.0.0.1 --port 8002</code></pre><p>Abre <a href="http://127.0.0.1:8002/graphql">GraphiQL /graphql</a>.</p></article>
+  </div>
+  <h3>Terminal 3 · para los comandos curl</h3>
+  <pre><code>curl -i http://127.0.0.1:8001/empleados</code></pre>
+  <p>Esta terminal puede estar en cualquier carpeta porque envía peticiones a una URL. Las otras dos siguen ocupadas ejecutando los servidores. Si solo quieres practicar REST, no hace falta encender GraphQL todavía.</p>
+  <div class="table-wrap"><table><thead><tr><th>Parte del comando</th><th>Significado</th></tr></thead><tbody><tr><td><code>-m uvicorn</code></td><td>Ejecutar Uvicorn con este intérprete Python.</td></tr><tr><td><code>rest_api:app</code></td><td>Importar el archivo <code>rest_api.py</code> y usar su variable <code>app</code>. No se escribe <code>.py</code> en el comando.</td></tr><tr><td><code>--reload</code></td><td>Reiniciar cuando cambia el código. Es útil para desarrollo.</td></tr><tr><td><code>--host 127.0.0.1</code></td><td>Escuchar solo en esta computadora.</td></tr><tr><td><code>--port 8001</code></td><td>Elegir el puerto. GraphQL usa otro para que puedan coexistir.</td></tr></tbody></table></div>
+  <div class="callout warn"><strong>Durante la exposición:</strong> no edites ni reinicies el código mientras demuestras los datos guardados: se perderán. Para empezar de nuevo, pulsa <kbd>Ctrl+C</kbd> y repite el comando del servidor. Usa un solo proceso, sin <code>--workers</code>.</div>
+  <p>Swagger y GraphiQL pueden descargar JavaScript desde Internet. Si sus páginas no cargan, puedes demostrar las APIs con <code>curl</code>; el frontend incluido y esta guía no necesitan recursos externos.</p>
+</section>
+
+<section id="codigo">
+  <span class="number">05 / LEER PYTHON CON SENTIDO</span><h2>El código REST explicado por bloques</h2>
+  <p>Abre <code>rest_api.py</code>. El orden es: importaciones → aplicación → modelos → datos → endpoints. Los comentarios numerados del archivo coinciden con esta explicación.</p>
+  <h3>Antes: la sintaxis mínima</h3>
+  <div class="table-wrap"><table><thead><tr><th>Sintaxis</th><th>Léelo así</th></tr></thead><tbody><tr><td><code>from paquete import herramienta</code></td><td>Traer una herramienta de un paquete.</td></tr><tr><td><code>class Nombre:</code></td><td>Definir una clase. Aquí describe la forma de un empleado.</td></tr><tr><td><code>nombre: str</code></td><td>Declarar que el nombre es texto. <code>int</code> es entero; <code>float</code> es número con decimales.</td></tr><tr><td><code>def funcion(...):</code></td><td>Definir una función. La sangría delimita su bloque.</td></tr><tr><td><code>@app.get(...)</code></td><td>Decorador: registra la función que está debajo como manejadora de una ruta GET.</td></tr><tr><td><code>return</code> / <code>raise</code></td><td>Devolver un resultado / lanzar una excepción.</td></tr><tr><td><code>list[Empleado]</code></td><td>Una lista cuyos elementos son empleados.</td></tr></tbody></table></div>
+  <p>Las anotaciones de tipo de Python por sí solas no validan todo en ejecución. FastAPI y Pydantic las interpretan para procesar los datos de la API.</p>
+  <h3>1–2. Definir entrada y salida</h3>
+  <pre><code>class EmpleadoEntrada(BaseModel):
+    nombre: str = Field(min_length=2, max_length=80)
+    puesto: str = Field(min_length=2, max_length=80)
+    salario: float = Field(gt=0, allow_inf_nan=False)
+
+class Empleado(EmpleadoEntrada):
+    id: int</code></pre>
+  <p><code>BaseModel</code> aporta validación. Los tres campos son obligatorios. <code>min_length</code> y <code>max_length</code> delimitan la longitud; <code>gt=0</code> significa “mayor que cero”; <code>allow_inf_nan=False</code> rechaza valores no finitos.</p>
+  <p><code>Empleado</code> <strong>hereda</strong> de <code>EmpleadoEntrada</code>: reutiliza nombre, puesto y salario, y agrega el ID. Así no repetimos los campos. El cliente manda la entrada y el servidor devuelve la salida.</p>
+  <p>Pydantic puede convertir algunos valores compatibles, por ejemplo una cadena numérica a un número. No estamos activando validación estricta. Las reglas mostradas son básicas; no detectan por sí solas todos los nombres sin sentido o compuestos únicamente por espacios. <a href="https://docs.pydantic.dev/latest/concepts/fields/">Restricciones de campos en Pydantic</a>.</p>
+  <blockquote class="say">«Este modelo es la regla de entrada: necesito nombre, puesto y un salario positivo. El ID lo genera el servidor».</blockquote>
+  <h3>3. Guardar temporalmente los empleados</h3>
+  <pre><code>empleados = {
+    1: Empleado(id=1, nombre="Ana Torres", puesto="Desarrolladora", salario=5000),
+    2: Empleado(id=2, nombre="Luis Pérez", puesto="Diseñador", salario=4500),
+}
+siguiente_id = 3</code></pre>
+  <p>Un <strong>diccionario</strong> guarda pares clave–valor. <code>empleados[1]</code> accede al objeto de Ana. <code>empleados.values()</code> obtiene los objetos y <code>list(...)</code> los convierte en una lista. El contador empieza en 3 porque ya existen 1 y 2.</p>
+  <p>Esto no es una base de datos. Al detener o recargar el proceso se pierde la memoria y vuelven los datos iniciales. El contador evita reutilizar el último ID eliminado dentro de esa ejecución.</p>
+  <h3>4–5. GET: consultar una colección o un elemento</h3>
+  <pre><code>@app.get("/empleados/{empleado_id}", response_model=Empleado)
+async def obtener_empleado(empleado_id: int):
+    if empleado_id not in empleados:
+        raise HTTPException(status_code=404, detail="Empleado no encontrado")
+    return empleados[empleado_id]</code></pre>
+  <ol><li>El decorador registra método y ruta.</li><li>FastAPI toma <code>empleado_id</code> de la URL e intenta convertirlo a entero.</li><li><code>if ... not in</code> comprueba si no existe la clave.</li><li><code>HTTPException</code> interrumpe el flujo y produce el error HTTP.</li><li>Si existe, <code>return</code> devuelve el empleado. FastAPI lo serializa a JSON.</li></ol>
+  <p><code>response_model</code> describe, valida y filtra la salida según el modelo indicado. La ruta de lista usa <code>list[Empleado]</code>, porque devuelve varios.</p>
+  <h3>6. POST: el bloque principal de tu exposición</h3>
+  <pre><code>@app.post("/empleados", response_model=Empleado, status_code=201)
+async def crear_empleado(datos: EmpleadoEntrada):
+    global siguiente_id
+    nuevo = Empleado(id=siguiente_id, **datos.model_dump())
+    empleados[siguiente_id] = nuevo
+    siguiente_id += 1
+    return nuevo</code></pre>
+  <div class="steps">
+    <div class="step"><h3>Recibir y validar</h3><p><code>datos: EmpleadoEntrada</code> le indica a FastAPI que lea el JSON del cuerpo y lo valide con Pydantic. Si no cumple, responde 422 antes de ejecutar la función. <a href="https://fastapi.tiangolo.com/tutorial/body/">Cuerpos de petición en FastAPI</a>.</p></div>
+    <div class="step"><h3>Usar el contador</h3><p><code>global siguiente_id</code> permite reasignar la variable del módulo desde la función. Lo necesitamos para <code>+= 1</code>. En cambio, modificar una entrada del diccionario no reasigna la variable <code>empleados</code>.</p></div>
+    <div class="step"><h3>Construir el objeto</h3><p><code>model_dump()</code> convierte el modelo validado en un diccionario. <code>**</code> expande sus campos como argumentos. Equivale a escribir <code>Empleado(id=3, nombre=datos.nombre, puesto=datos.puesto, salario=datos.salario)</code>.</p></div>
+    <div class="step"><h3>Guardar y responder</h3><p><code>empleados[siguiente_id] = nuevo</code> guarda el empleado. <code>+= 1</code> prepara el próximo ID. <code>return nuevo</code> devuelve el objeto con estado HTTP 201.</p></div>
+  </div>
+  <div class="callout"><strong>Recorrido que debes memorizar:</strong> llega JSON → FastAPI/Pydantic validan → tu función asigna ID y guarda → FastAPI responde JSON con HTTP 201.</div>
+  <h3>7. PUT: reemplazar los campos editables</h3>
+  <p>Recibe dos tipos de datos: <code>empleado_id</code> desde la ruta y <code>datos</code> desde el cuerpo. Primero comprueba que el empleado exista. Construye otro objeto con el <strong>mismo ID</strong> y sustituye la entrada del diccionario.</p>
+  <p>Debes enviar nombre, puesto y salario. Si omites uno, recibes 422. Este endpoint no crea empleados cuando el ID no existe: responde 404.</p>
+  <h3>8. DELETE: eliminar sin devolver JSON</h3>
+  <pre><code>del empleados[empleado_id]
+return Response(status_code=204)</code></pre>
+  <p>Después de comprobar la existencia, <code>del</code> elimina esa clave. <code>Response</code> permite devolver explícitamente una respuesta vacía: 204 no debe contener un mensaje JSON. <a href="https://fastapi.tiangolo.com/tutorial/response-status-code/">Estados de respuesta en FastAPI</a>.</p>
+  <h3>¿Por qué aparece async def si no hay await?</h3>
+  <p><code>async def</code> define una función asíncrona que el framework ejecuta. Las operaciones de esta demo son muy cortas y solo usan memoria, así que no hay una espera de red que requiera <code>await</code>. No significa “código automáticamente más rápido”.</p>
+  <p>Si añadieras una petición HTTP asíncrona, usarías <code>await</code> para ceder el control mientras llega la respuesta. No debes meter llamadas bloqueantes largas en una función asíncrona. El contador y el diccionario de esta demo no sustituyen las garantías de una base de datos.</p>
+  <h3>Archivo REST completo</h3>
+  <p>Al final, <code>app.mount</code> publica únicamente la carpeta <code>web</code> en <code>/web</code>. <code>Path(__file__).parent</code> localiza la carpeta del programa. Esa parte sirve el HTML; no pertenece al CRUD de empleados.</p>
+  <div class="code-title">rest_api.py · código real del proyecto</div>
+  <pre><code id="codigo-rest">&quot;&quot;&quot;Ejemplo REST de empleados. Los datos se guardan solo en memoria.&quot;&quot;&quot;
+
+from pathlib import Path
+
+from fastapi import FastAPI, HTTPException, Response
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
+
+app = FastAPI(title=&quot;REST · Empleados&quot;, version=&quot;1.0&quot;)
+
+
+# 1. Entrada: el cliente envía estos tres campos, sin id.
+class EmpleadoEntrada(BaseModel):
+    nombre: str = Field(min_length=2, max_length=80)
+    puesto: str = Field(min_length=2, max_length=80)
+    salario: float = Field(gt=0, allow_inf_nan=False)
+
+
+# 2. Salida: hereda los campos anteriores y añade el id.
+class Empleado(EmpleadoEntrada):
+    id: int
+
+
+# 3. Almacén temporal: diccionario con el id como clave.
+empleados = {
+    1: Empleado(id=1, nombre=&quot;Ana Torres&quot;, puesto=&quot;Desarrolladora&quot;, salario=5000),
+    2: Empleado(id=2, nombre=&quot;Luis Pérez&quot;, puesto=&quot;Diseñador&quot;, salario=4500),
+}
+siguiente_id = 3
+
+
+# 4. READ: consultar todos.
+@app.get(&quot;/empleados&quot;, response_model=list[Empleado])
+async def listar_empleados():
+    return list(empleados.values())
+
+
+# 5. READ: consultar uno por el id de la URL.
+@app.get(&quot;/empleados/{empleado_id}&quot;, response_model=Empleado)
+async def obtener_empleado(empleado_id: int):
+    if empleado_id not in empleados:
+        raise HTTPException(status_code=404, detail=&quot;Empleado no encontrado&quot;)
+    return empleados[empleado_id]
+
+
+# 6. CREATE: recibir JSON, asignar id y guardar.
+@app.post(&quot;/empleados&quot;, response_model=Empleado, status_code=201)
+async def crear_empleado(datos: EmpleadoEntrada):
+    global siguiente_id
+    nuevo = Empleado(id=siguiente_id, **datos.model_dump())
+    empleados[siguiente_id] = nuevo
+    siguiente_id += 1
+    return nuevo
+
+
+# 7. UPDATE: reemplazar los tres campos; conservar el id.
+@app.put(&quot;/empleados/{empleado_id}&quot;, response_model=Empleado)
+async def actualizar_empleado(empleado_id: int, datos: EmpleadoEntrada):
+    if empleado_id not in empleados:
+        raise HTTPException(status_code=404, detail=&quot;Empleado no encontrado&quot;)
+    actualizado = Empleado(id=empleado_id, **datos.model_dump())
+    empleados[empleado_id] = actualizado
+    return actualizado
+
+
+# 8. DELETE: eliminar y responder sin cuerpo.
+@app.delete(&quot;/empleados/{empleado_id}&quot;, status_code=204)
+async def eliminar_empleado(empleado_id: int):
+    if empleado_id not in empleados:
+        raise HTTPException(status_code=404, detail=&quot;Empleado no encontrado&quot;)
+    del empleados[empleado_id]
+    return Response(status_code=204)
+
+
+# Opcional: publica la guía y el frontend de práctica en /web/.
+# Path pertenece a Python; StaticFiles viene de Starlette a través de FastAPI.
+app.mount(
+    &quot;/web&quot;,
+    StaticFiles(directory=Path(__file__).parent / &quot;web&quot;, html=True),
+    name=&quot;web&quot;,
+)
+</code></pre>
+</section>
+
+<section id="practica">
+  <span class="number">06 / ENSAYA CON PETICIONES REALES</span><h2>Tu demostración REST, en orden</h2>
+  <p>Empieza con REST recién iniciado. Si ya creaste empleados desde la demo o Swagger, usa el ID que devuelva tu POST; puede ser distinto de 3.</p>
+  <h3>Opción visual: Swagger</h3>
+  <ol><li>Abre <a href="http://127.0.0.1:8001/docs">http://127.0.0.1:8001/docs</a>.</li><li>Expande <code>GET /empleados</code> → <strong>Try it out</strong> → <strong>Execute</strong>.</li><li>Muestra el JSON y el <strong>Code 200</strong> en “Server response”.</li><li>Abre <code>POST /empleados</code>, pulsa <strong>Try it out</strong>, pega el cuerpo del ejemplo y ejecuta.</li><li>Muestra <strong>201</strong> y el ID generado; luego repite GET.</li><li>Para PUT o DELETE, introduce el ID devuelto por POST en el campo <code>empleado_id</code>.</li></ol>
+  <p>“Example Value” muestra un ejemplo de documentación; <strong>“Server response” es la respuesta real</strong>. Swagger es un cliente que hace peticiones a la API, igual que el frontend o curl.</p>
+  <h3>1. Listar y consultar</h3>
+  <pre><code>curl -i http://127.0.0.1:8001/empleados
+curl -i http://127.0.0.1:8001/empleados/1</code></pre>
+  <p><strong>Resultado:</strong> 200; primero una lista con Ana y Luis y después un objeto con Ana. <code>curl</code> es un cliente HTTP de terminal. <code>-i</code> muestra también las cabeceras y el código.</p>
+  <h3>2. Crear</h3>
+  <pre><code>curl -i -X POST http://127.0.0.1:8001/empleados \
+  -H 'Content-Type: application/json' \
+  -d '{"nombre":"Marta Ruiz","puesto":"Analista","salario":6000}'</code></pre>
+  <p><strong>Resultado:</strong> 201 y Marta con un ID nuevo. <code>-X</code> elige el método, <code>-H</code> añade una cabecera y <code>-d</code> envía el cuerpo. La barra <code>\</code> permite continuar el comando en la siguiente línea: no añadas espacios después de ella.</p>
+  <pre><code>{"nombre":"Marta Ruiz","puesto":"Analista","salario":6000.0,"id":3}</code></pre>
+  <h3>3. Actualizar</h3>
+  <pre><code>curl -i -X PUT http://127.0.0.1:8001/empleados/3 \
+  -H 'Content-Type: application/json' \
+  -d '{"nombre":"Marta Ruiz","puesto":"Líder de QA","salario":6500}'</code></pre>
+  <p><strong>Resultado:</strong> 200; mismo ID, nuevo puesto y salario. El cuerpo sigue incluyendo los tres campos requeridos.</p>
+  <h3>4. Eliminar y comprobar</h3>
+  <pre><code>curl -i -X DELETE http://127.0.0.1:8001/empleados/3
+curl -i http://127.0.0.1:8001/empleados/3</code></pre>
+  <p><strong>Resultado:</strong> primero 204 sin cuerpo. Después 404 con:</p>
+  <pre><code>{"detail":"Empleado no encontrado"}</code></pre>
+  <h3>5. Provocar un error de validación</h3>
+  <pre><code>curl -i -X POST http://127.0.0.1:8001/empleados \
+  -H 'Content-Type: application/json' \
+  -d '{"nombre":"Marta Ruiz","puesto":"Analista","salario":-10}'</code></pre>
+  <p><strong>Resultado:</strong> 422. En <code>detail</code> verás la ubicación <code>["body", "salario"]</code> y la regla de “mayor que cero”. No se guarda un nuevo empleado.</p>
+  <blockquote class="say">«El 404 lo decido en mi función cuando no encuentro el recurso. El 422 lo genera FastAPI al validar la entrada antes de llamar a mi función».</blockquote>
+</section>
+
+<section id="frontend">
+  <span class="number">07 / CERRAR EL CIRCUITO FULL STACK</span><h2>Del botón al backend Python</h2>
+  <p>Con REST encendido, abre <a class="btn primary" href="http://127.0.0.1:8001/web/demo.html">Abrir el frontend de práctica</a>. Pulsa «Cargar empleados», crea uno y vuelve a cargar. Debajo verás la petición y la respuesta reales.</p>
+  <p>La llamada esencial en el navegador es:</p>
+  <pre><code>const respuesta = await fetch('/empleados');
+const empleados = await respuesta.json();</code></pre>
+  <p><code>fetch</code> realiza por defecto un GET. <code>await</code> espera su resultado sin bloquear la interfaz. <code>respuesta.json()</code> interpreta el cuerpo JSON como datos de JavaScript. Luego el código recorre la lista y crea filas de tabla.</p>
+  <p>Para crear, el frontend envía los datos de los campos del formulario:</p>
+  <pre><code>const respuesta = await fetch('/empleados', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    nombre: 'Marta Ruiz',
+    puesto: 'Analista',
+    salario: 6000
+  })
+});</code></pre>
+  <p><code>JSON.stringify</code> transforma el objeto en texto JSON. El archivo <code>web/demo.html</code> incluye además manejo de errores y comprueba <code>respuesta.ok</code>: <code>fetch</code> no lanza automáticamente una excepción por un 404 o un 422.</p>
+  <div class="callout"><strong>Una sola dirección base:</strong> la página y REST se sirven desde <code>http://127.0.0.1:8001</code>. Por eso la ruta relativa funciona y no necesitas configurar CORS. Abrir el archivo de la demo con doble clic no equivale a servirlo desde la API.</div>
+  <p>Puedes abrir las herramientas del navegador → <strong>Network / Red</strong> y pulsar el botón: verás la petición <code>/empleados</code>, su método, su estado y el JSON. La validación del formulario ayuda al usuario, pero el backend también valida porque se puede llamar directamente con curl.</p>
+</section>
+
+<section id="graphql">
+  <span class="number">08 / LA OTRA FORMA DE PEDIR DATOS</span><h2>GraphQL: pide los campos que necesitas</h2>
+  <p><strong>GraphQL</strong> es un lenguaje de consulta para APIs y un sistema de ejecución. El servidor define un esquema; el cliente selecciona campos permitidos por ese esquema. No es una base de datos ni permite consultar automáticamente cualquier dato del servidor.</p>
+  <p>Esta implementación usa una ruta, <code>/graphql</code>, y dos clases de operación: <strong>query</strong> para leer y <strong>mutation</strong> para cambiar datos. Aquí implementamos lectura y creación para mantener pequeño el ejemplo. <a href="https://graphql.org/learn/queries/">Consultas y selección de campos en GraphQL</a>.</p>
+  <h3>Primera query · solo nombres</h3>
+  <p>En <a href="http://127.0.0.1:8002/graphql">GraphiQL</a>, pega una operación y pulsa el botón ▶. También puedes copiar desde <code>consultas.graphql</code>.</p>
+  <pre><code>query {
+  empleados {
+    nombre
+  }
+}</code></pre>
+  <p>Con el servidor recién iniciado:</p>
+  <pre><code>{
+  "data": {
+    "empleados": [
+      {"nombre": "Ana Torres"},
+      {"nombre": "Luis Pérez"}
+    ]
+  }
+}</code></pre>
+  <p>Añade <code>puesto</code> debajo de <code>nombre</code> y ejecuta otra vez. Ahora llegan esos dos campos. Esta es la comparación más clara con el GET de nuestra API REST, que devuelve el objeto completo que definió el servidor.</p>
+  <h3>Consultar un empleado</h3>
+  <pre><code>query {
+  empleado(id: 1) {
+    nombre
+    puesto
+  }
+}</code></pre>
+  <p><code>id: 1</code> es un argumento GraphQL. Si usas 999, este resolver devuelve <code>null</code>: el esquema permite que no exista un resultado.</p>
+  <h3>Crear con una mutation</h3>
+  <pre><code>mutation {
+  crearEmpleado(datos: {
+    nombre: "Marta Ruiz"
+    puesto: "Analista"
+    salario: 6000
+  }) {
+    id
+    nombre
+  }
+}</code></pre>
+  <p>La primera parte envía los datos; las llaves finales piden qué campos devolver después de crear. El resultado contiene <code>data.crearEmpleado</code>. El ID será 3 si es la primera creación de esa ejecución.</p>
+  <h3>Qué significa cada bloque Python</h3>
+  <div class="table-wrap"><table><thead><tr><th>Bloque</th><th>Explicación para decir en voz alta</th></tr></thead><tbody>
+    <tr><td><code>@strawberry.type</code></td><td>Declara un tipo de salida o una raíz de operaciones en el esquema.</td></tr>
+    <tr><td><code>@strawberry.input</code></td><td>Define los campos que se aceptan como entrada para crear.</td></tr>
+    <tr><td><code>Query</code> + <code>@strawberry.field</code></td><td>Publica consultas. Las funciones que resuelven campos se llaman <em>resolvers</em>.</td></tr>
+    <tr><td><code>self</code></td><td>Referencia a la instancia de la clase. No se manda desde GraphiQL.</td></tr>
+    <tr><td><code>-&gt; list[Empleado]</code></td><td>Indica el tipo de retorno. Strawberry lo usa para construir el esquema.</td></tr>
+    <tr><td><code>Empleado | None</code></td><td>Permite devolver un empleado o ausencia de resultado, que se expresa como <code>null</code>.</td></tr>
+    <tr><td><code>Mutation</code> + <code>@strawberry.mutation</code></td><td>Publica una operación que cambia el estado: crear un empleado.</td></tr>
+    <tr><td><code>Schema</code></td><td>Une los tipos y operaciones en el contrato GraphQL.</td></tr>
+    <tr><td><code>GraphQLRouter</code></td><td>Conecta el esquema con FastAPI y publica la ruta HTTP.</td></tr>
+  </tbody></table></div>
+  <p>Strawberry convierte por defecto <code>crear_empleado</code> en <code>crearEmpleado</code>. El nombre Python usa guiones bajos; en GraphiQL usamos camelCase. <a href="https://strawberry.rocks/docs/general/mutations/">Mutations de Strawberry</a>.</p>
+  <p>Las reglas de longitud y salario se comprueban con <code>if</code> dentro de la mutation. Declarar <code>salario: float</code> establece su tipo, pero no impone que sea positivo. Si envías salario negativo, la respuesta contiene <code>errors</code>.</p>
+  <div class="callout warn"><strong>GraphQL también utiliza HTTP en esta demo.</strong> Un fallo al ejecutar un resolver puede venir en <code>errors</code> aunque el estado HTTP sea 200. No significa que GraphQL siempre devuelva 200: errores de transporte o una petición HTTP inválida pueden usar otros códigos. Examina el cuerpo y el estado.</div>
+  <h3>El mismo ejemplo desde una terminal</h3>
+  <pre><code>curl -i -X POST http://127.0.0.1:8002/graphql \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"query { empleados { nombre } }"}'</code></pre>
+  <p>El cuerpo HTTP es JSON. Dentro del campo <code>query</code> viaja un texto escrito en lenguaje GraphQL. El <code>README.md</code> incluye también el comando curl para crear.</p>
+  <h3>Archivo GraphQL completo</h3>
+  <p>El ejemplo usa una lista: <code>append</code> añade el nuevo objeto y <code>for</code> recorre empleados para buscar uno. No hay consultas a disco ni a servicios externos. Los resolvers son cortos; si añades trabajo bloqueante, tendrás que adaptar su ejecución. <a href="https://strawberry.rocks/docs/integrations/fastapi/">Integración de Strawberry con FastAPI</a>.</p>
+  <div class="code-title">graphql_api.py · código real del proyecto</div>
+  <pre><code id="codigo-graphql">&quot;&quot;&quot;Ejemplo GraphQL. Su memoria es independiente de la del ejemplo REST.&quot;&quot;&quot;
+
+import strawberry
+from fastapi import FastAPI
+from strawberry.fastapi import GraphQLRouter
+
+
+# 1. Tipo de salida que el cliente puede consultar.
+@strawberry.type
+class Empleado:
+    id: int
+    nombre: str
+    puesto: str
+    salario: float
+
+
+# 2. Tipo de entrada para crear un empleado.
+@strawberry.input
+class EmpleadoEntrada:
+    nombre: str
+    puesto: str
+    salario: float
+
+
+empleados = [
+    Empleado(id=1, nombre=&quot;Ana Torres&quot;, puesto=&quot;Desarrolladora&quot;, salario=5000),
+    Empleado(id=2, nombre=&quot;Luis Pérez&quot;, puesto=&quot;Diseñador&quot;, salario=4500),
+]
+siguiente_id = 3
+
+
+# 3. Query: operaciones de lectura.
+@strawberry.type
+class Query:
+    @strawberry.field
+    def empleados(self) -&gt; list[Empleado]:
+        return empleados
+
+    @strawberry.field
+    def empleado(self, id: int) -&gt; Empleado | None:
+        for empleado in empleados:
+            if empleado.id == id:
+                return empleado
+        return None
+
+
+# 4. Mutation: una operación que modifica datos.
+@strawberry.type
+class Mutation:
+    @strawberry.mutation
+    def crear_empleado(self, datos: EmpleadoEntrada) -&gt; Empleado:
+        global siguiente_id
+        if not 2 &lt;= len(datos.nombre.strip()) &lt;= 80:
+            raise ValueError(&quot;El nombre debe tener entre 2 y 80 caracteres&quot;)
+        if not 2 &lt;= len(datos.puesto.strip()) &lt;= 80:
+            raise ValueError(&quot;El puesto debe tener entre 2 y 80 caracteres&quot;)
+        if datos.salario &lt;= 0:
+            raise ValueError(&quot;El salario debe ser mayor que cero&quot;)
+        nuevo = Empleado(
+            id=siguiente_id,
+            nombre=datos.nombre,
+            puesto=datos.puesto,
+            salario=datos.salario,
+        )
+        empleados.append(nuevo)
+        siguiente_id += 1
+        return nuevo
+
+
+# 5. Unimos el contrato y lo publicamos en una ruta HTTP.
+schema = strawberry.Schema(query=Query, mutation=Mutation)
+app = FastAPI(title=&quot;GraphQL · Empleados&quot;)
+app.include_router(GraphQLRouter(schema), prefix=&quot;/graphql&quot;)
+</code></pre>
+  <p><strong>Atención:</strong> REST y GraphQL tienen almacenes separados. Crear Marta en REST no hace que aparezca en GraphQL. Son dos ejemplos independientes del mismo concepto.</p>
+</section>
+
+<section id="comparacion">
+  <span class="number">09 / COMPARAR SIN EXAGERAR</span><h2>Mismo recurso, contratos diferentes</h2>
+  <div class="table-wrap"><table><thead><tr><th>Pregunta</th><th>REST en esta demo</th><th>GraphQL en esta demo</th></tr></thead><tbody><tr><td>¿Dónde pido datos?</td><td><code>/empleados</code> y <code>/empleados/1</code>.</td><td><code>/graphql</code>.</td></tr><tr><td>¿Cómo expreso la operación?</td><td>Método HTTP y ruta.</td><td>Query o mutation en el documento enviado.</td></tr><tr><td>¿Quién elige los campos?</td><td>El servidor define la representación de la respuesta.</td><td>El cliente selecciona entre los campos del esquema.</td></tr><tr><td>¿Cómo pruebo?</td><td>Swagger UI o curl.</td><td>GraphiQL o curl.</td></tr><tr><td>¿Cómo detecto fallos?</td><td>Estado HTTP y cuerpo del error.</td><td>Estado HTTP, <code>data</code> y <code>errors</code>.</td></tr><tr><td>¿Qué implementamos?</td><td>Lectura, creación, actualización y eliminación.</td><td>Lectura y creación.</td></tr></tbody></table></div>
+  <p>REST también puede ofrecer filtros y selección de campos si se diseñan esos parámetros. GraphQL puede reducir datos innecesarios y ayudar con consultas relacionadas, pero no garantiza menos trabajo interno ni mayor velocidad. La elección depende del contrato y de las necesidades del cliente.</p>
+  <blockquote class="say">«En REST el servidor define la respuesta de cada endpoint; en GraphQL el cliente elige campos del esquema. Ambos pueden conectar un frontend con un backend Python».</blockquote>
+  <h3>Lo que esta demo simplifica</h3>
+  <p>Usamos memoria para concentrarnos en HTTP y el código. Una aplicación real necesita persistencia y control de acceso, entre otras piezas. El salario usa <code>float</code> por sencillez; para cálculos monetarios exactos conviene <code>Decimal</code> o cantidades enteras de la unidad mínima. Ninguna de estas APIs está planteada como un sistema listo para producción.</p>
+</section>
+
+<section id="exponer">
+  <span class="number">10 / GUION SUGERIDO</span><h2>Una exposición de 10–12 minutos</h2>
+  <div class="timeline">
+    <p><strong>0:00–1:30 · El panorama.</strong> «Full stack incluye interfaz, backend y datos. Python procesa las solicitudes. Reflex permite escribir la interfaz en Python; hoy veré la comunicación con un HTML sencillo».</p>
+    <p><strong>1:30–3:00 · El contrato REST.</strong> «Mi recurso es Empleado. GET consulta, POST crea, PUT reemplaza y DELETE elimina». Muestra la tabla de métodos y una petición con cuerpo JSON.</p>
+    <p><strong>3:00–5:30 · El código.</strong> Explica <code>EmpleadoEntrada</code>, el diccionario, el decorador y la función POST. Recorre validación → ID → guardar → respuesta 201. Explica <code>model_dump</code> y <code>**</code> con calma.</p>
+    <p><strong>5:30–8:30 · REST en vivo.</strong> Lista, crea, actualiza y elimina. Después consulta el eliminado para mostrar 404; manda un salario negativo para mostrar 422. Si el tiempo es corto, prioriza GET, POST y 422.</p>
+    <p><strong>8:30–9:30 · Full stack visible.</strong> Abre el frontend, pulsa «Cargar empleados» y señala la petición. «El botón llama a mi función Python a través de HTTP».</p>
+    <p><strong>9:30–11:00 · GraphQL.</strong> Pide solo <code>nombre</code>; después añade <code>puesto</code>. Muestra una mutation si tienes tiempo.</p>
+    <p><strong>11:00–12:00 · Cierre.</strong> «Los dos estilos exponen datos del backend. REST usa recursos y métodos; GraphQL permite elegir campos. Nuestra memoria es temporal y se reemplazaría por persistencia en una aplicación real».</p>
+  </div>
+  <div class="callout"><strong>Tu prioridad:</strong> entiende primero el recorrido de POST y la diferencia entre 404 y 422. Si dominas eso, ya puedes explicar el centro del ejemplo sin memorizar todo el archivo.</div>
+  <h3>Prepara la pantalla antes de empezar</h3>
+  <ol><li>Instala las dependencias y ensaya una vez.</li><li>Reinicia ambos servidores para recuperar Ana y Luis.</li><li>Deja abiertos el código REST, Swagger, la demo HTML y GraphiQL.</li><li>Ten una tercera terminal para curl si las interfaces de documentación no cargan.</li><li>No ejecutes POST varias veces esperando el mismo ID. Lee el ID de la respuesta.</li></ol>
+</section>
+
+<section id="repaso">
+  <span class="number">11 / COMPRUEBA QUE LO ENTENDISTE</span><h2>Preguntas que podrían hacerte</h2>
+  <details><summary>¿FastAPI y Uvicorn son lo mismo?</summary><p>No. FastAPI define la aplicación y las rutas. Uvicorn es el servidor que escucha HTTP y ejecuta esa aplicación mediante ASGI. ASGI es una interfaz entre el servidor y la aplicación Python.</p></details>
+  <details><summary>¿Por qué no mandamos el ID al crear?</summary><p>Porque el servidor se encarga de asignarlo. Así el cliente manda los datos editables y la respuesta incluye el identificador generado.</p></details>
+  <details><summary>¿Qué ocurre si envío /empleados/hola?</summary><p>FastAPI no puede convertir “hola” al entero declarado en la ruta. Responde 422 antes de ejecutar la función. Si envías un entero válido que no existe, la función responde 404.</p></details>
+  <details><summary>¿Los cambios quedan guardados al cerrar?</summary><p>No. El diccionario y la lista viven en RAM. Al reiniciar se ejecuta el archivo de nuevo y se restauran los dos empleados iniciales.</p></details>
+  <details><summary>¿GraphQL consulta directamente una base de datos?</summary><p>No necesariamente. Ejecuta resolvers definidos por el servidor. Aquí los resolvers leen una lista; podrían consultar una base de datos u otra API.</p></details>
+  <details><summary>¿Por qué GET /empleados no devuelve una página bonita?</summary><p>Porque es un endpoint de datos que responde JSON. El frontend toma esos datos y los presenta. La página de práctica se sirve por separado en /web/demo.html.</p></details>
+  <details><summary>¿Reflex es obligatorio para usar Python full stack?</summary><p>No. Puedes usar Python en el backend con HTML y JavaScript en el frontend. Reflex es una alternativa que permite declarar también la interfaz en Python.</p></details>
+  <h3>Mini ejercicio · responde antes de revelar</h3>
+  <div class="card quiz"><p>1. Quieres crear un empleado: ¿método, ruta y estado de éxito?<br>2. Envías salario -10: ¿entra a <code>crear_empleado</code>?<br>3. Borras al empleado 3 y vuelves a consultarlo: ¿qué ocurre?<br>4. GraphQL devuelve solo <code>nombre</code>: ¿quién eligió ese campo?<br>5. Reinicias REST: ¿dónde está Marta?</p><button class="btn" id="resolver" aria-expanded="false" aria-controls="respuestas">Ver respuestas</button><div class="reveal" id="respuestas"><p><strong>1.</strong> POST /empleados → 201.<br><strong>2.</strong> No; FastAPI/Pydantic rechazan la entrada con 422.<br><strong>3.</strong> GET devuelve 404 porque el recurso ya no existe.<br><strong>4.</strong> El cliente, dentro de los campos que permite el esquema.<br><strong>5.</strong> Ya no está: la memoria se reinició.</p></div></div>
+  <h3>Si algo no corre</h3>
+  <div class="table-wrap"><table><thead><tr><th>Mensaje / síntoma</th><th>Qué revisar</th></tr></thead><tbody><tr><td>No module named uvicorn / fastapi / strawberry</td><td>Instala con <code>.venv/bin/python -m pip install -r requirements.txt</code> y ejecuta con ese mismo Python.</td></tr><tr><td>Could not import module rest_api</td><td>Estás en otra carpeta. Repite el <code>cd</code> de la preparación. El nombre en Uvicorn no lleva <code>.py</code>.</td></tr><tr><td>Address already in use</td><td>Puede que ya tengas el servidor encendido. Usa el existente o detén tu ejecución anterior con Ctrl+C. Si eliges otro puerto, ajusta las URLs.</td></tr><tr><td>Connection refused / no conecta</td><td>Comprueba que Uvicorn siga abierto y que el puerto sea 8001 para REST o 8002 para GraphQL.</td></tr><tr><td>La ruta / muestra 404</td><td>La portada está en <code>/web/</code>. Los datos están en <code>/empleados</code>.</td></tr><tr><td>La demo HTML no conecta</td><td>Ábrela por <code>http://127.0.0.1:8001/web/demo.html</code>, no con doble clic al archivo.</td></tr><tr><td>Swagger o GraphiQL están en blanco</td><td>Sus recursos visuales pueden necesitar Internet. Usa curl y la demo local.</td></tr><tr><td>POST devuelve 422</td><td>Lee <code>detail</code>. Envía nombre y puesto de 2–80 caracteres y un salario numérico positivo; revisa las comillas del JSON.</td></tr><tr><td>GraphQL dice que no existe crear_empleado</td><td>En la consulta el nombre es <code>crearEmpleado</code>. Respeta mayúsculas y minúsculas.</td></tr><tr><td>Falla python3 -m venv</td><td>Comprueba la instalación de Python y el soporte venv de tu distribución. No instales las dependencias de la demo sobre el Python del sistema.</td></tr></tbody></table></div>
+</section>
+
+<section id="fuentes">
+  <span class="number">12 / PARA PROFUNDIZAR</span><h2>Archivos y documentación</h2>
+  <p>Base local: <strong>Python_REST.pdf</strong>, especialmente las secciones de REST, GraphQL y consumo desde Reflex. Conservamos Empleado, FastAPI y Strawberry. Simplificamos los campos quitando email y añadimos PUT para demostrar CRUD completo.</p>
+  <p>El archivo <code>Sin confirmar 331606.crdownload</code> no se pudo leer como PDF completo y no se usó como fuente.</p>
+  <ul><li><a href="https://fastapi.tiangolo.com/tutorial/first-steps/">FastAPI · rutas y documentación automática</a></li><li><a href="https://fastapi.tiangolo.com/tutorial/body/">FastAPI · modelos para el cuerpo JSON</a></li><li><a href="https://fastapi.tiangolo.com/tutorial/handling-errors/">FastAPI · HTTPException y manejo de errores</a></li><li><a href="https://docs.pydantic.dev/latest/concepts/fields/">Pydantic · validación de campos</a></li><li><a href="https://www.uvicorn.org/settings/">Uvicorn · puertos y recarga</a></li><li><a href="https://strawberry.rocks/docs/integrations/fastapi/">Strawberry · integración con FastAPI</a></li><li><a href="https://graphql.org/learn/queries/">GraphQL · consultas y campos</a></li><li><a href="https://reflex.dev/docs/advanced-onboarding/how-reflex-works/">Reflex · funcionamiento del frontend y backend</a></li></ul>
+  <p>Para cambiar el código mostrado tras editar los archivos Python, ejecuta desde la raíz: <code>python3 scripts/actualizar_codigos_guia.py</code>.</p>
+</section>
+<footer>Python full stack · Material de estudio para COM-600.<br>Empieza por comprender una petición; después recorre las demás.</footer>
+</main>
+<script>
+// Mejoras opcionales: la explicación y el código siguen visibles sin JavaScript.
+document.querySelectorAll('pre').forEach(pre => {
+  pre.classList.add('with-copy');
+  const boton = document.createElement('button');
+  boton.className = 'copy';
+  boton.textContent = 'Copiar';
+  boton.setAttribute('aria-label', 'Copiar este bloque de código');
+  boton.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(pre.querySelector('code').textContent);
+      boton.textContent = 'Copiado';
+    } catch {
+      const seleccion = window.getSelection();
+      const rango = document.createRange();
+      rango.selectNodeContents(pre.querySelector('code'));
+      seleccion.removeAllRanges();
+      seleccion.addRange(rango);
+      boton.textContent = 'Usa Ctrl+C';
+    }
+    setTimeout(() => boton.textContent = 'Copiar', 2500);
+  });
+  pre.append(boton);
+});
+document.querySelector('#presentar').addEventListener('click', evento => {
+  const activo = document.body.classList.toggle('present');
+  evento.currentTarget.setAttribute('aria-pressed', activo);
+  evento.currentTarget.textContent = activo ? 'Salir del modo exposición' : 'Modo exposición';
+});
+const abiertos = [];
+window.addEventListener('beforeprint', () => {
+  document.querySelectorAll('details').forEach(d => {
+    if (!d.open) { abiertos.push(d); d.open = true; }
+  });
+});
+window.addEventListener('afterprint', () => {
+  abiertos.splice(0).forEach(d => d.open = false);
+});
+document.querySelector('#imprimir').addEventListener('click', () => window.print());
+document.querySelector('#resolver').addEventListener('click', evento => {
+  const activo = document.querySelector('#respuestas').classList.toggle('show');
+  evento.currentTarget.setAttribute('aria-expanded', activo);
+  evento.currentTarget.textContent = activo ? 'Ocultar respuestas' : 'Ver respuestas';
+});
+const secciones = [...document.querySelectorAll('main section')];
+function actualizarLectura() {
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  document.querySelector('#barra').style.width = `${total > 0 ? window.scrollY / total * 100 : 0}%`;
+  const actual = [...secciones].reverse().find(s => s.getBoundingClientRect().top < 180);
+  document.querySelectorAll('nav a').forEach(a => {
+    const activa = actual && a.hash === `#${actual.id}`;
+    a.classList.toggle('active', Boolean(activa));
+    if (activa) a.setAttribute('aria-current', 'location');
+    else a.removeAttribute('aria-current');
+  });
+}
+window.addEventListener('scroll', actualizarLectura, { passive: true });
+actualizarLectura();
+</script>
+</body>
+</html>

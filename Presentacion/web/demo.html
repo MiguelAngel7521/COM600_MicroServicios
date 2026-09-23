@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Empleados · Frontend REST</title>
+<style>
+  *{box-sizing:border-box}body{font:17px/1.6 system-ui,sans-serif;background:#eef3f8;color:#182c40;margin:0;padding:35px 20px}main{max-width:1000px;margin:auto}h1{font-size:clamp(32px,6vw,52px);line-height:1.1}a{color:#006859}section{background:white;border:1px solid #cdd9e4;border-radius:16px;padding:24px;margin:22px 0}label{display:block;font-weight:650}input{display:block;width:100%;font:inherit;padding:10px;border:1px solid #8295a7;border-radius:6px;margin:5px 0 16px}button{font:inherit;font-weight:650;border:0;border-radius:7px;background:#006859;color:white;padding:10px 18px;cursor:pointer}button:disabled{opacity:.6;cursor:wait}pre{background:#102334;color:#e5f4ff;padding:20px;overflow:auto;border-radius:8px;font-size:14px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:10px;border-bottom:1px solid #dde5ed}#estado{min-height:28px;font-weight:650}@media(max-width:700px){.cols{grid-template-columns:1fr}section{padding:16px}}:focus-visible{outline:3px solid #ba6c00;outline-offset:3px}
+</style>
+<main>
+  <a href="./">← Volver a la guía</a>
+  <h1>Una pantalla. Una API.</h1>
+  <p>Este frontend usa HTML + JavaScript. El backend usa Python + FastAPI. Cada botón envía una petición HTTP real.</p>
+  <p>Ábrelo desde <strong>http://127.0.0.1:8001/web/demo.html</strong>, con REST encendido. Los datos se reinician al reiniciar el servidor.</p>
+  <div class="cols">
+    <section>
+      <h2>1. Consultar empleados</h2>
+      <p>El botón envía <code>GET /empleados</code>.</p>
+      <button id="cargar" type="button">Cargar empleados</button>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Nombre</th><th>Puesto</th><th>Salario</th></tr></thead><tbody id="filas"></tbody></table></div>
+    </section>
+    <section>
+      <h2>2. Crear un empleado</h2>
+      <form id="formulario">
+        <label>Nombre<input id="nombre" required minlength="2" maxlength="80" value="Marta Ruiz"></label>
+        <label>Puesto<input id="puesto" required minlength="2" maxlength="80" value="Analista"></label>
+        <label>Salario (Bs)<input id="salario" type="number" required min="0.01" step="0.01" value="6000"></label>
+        <button type="submit">Crear con POST</button>
+      </form>
+    </section>
+  </div>
+  <p id="estado" role="status" aria-live="polite">Listo para enviar una petición.</p>
+  <section><h2>Lo que viaja por HTTP</h2><p>Después de crear, pulsa «Cargar empleados» para ver la lista actualizada.</p><pre id="trafico">Aquí aparecerán el método, la ruta, el cuerpo y la respuesta real.</pre></section>
+  <p>Para actualizar y eliminar, practica con Swagger en <a href="/docs">/docs</a>. Este frontend solo muestra GET y POST para que el JavaScript sea fácil de leer.</p>
+</main>
+<script>
+// La página y la API comparten origen, por eso basta una ruta relativa.
+const estado = document.querySelector('#estado');
+const trafico = document.querySelector('#trafico');
+const filas = document.querySelector('#filas');
+
+async function pedir(metodo, datos) {
+  estado.textContent = 'Enviando petición…';
+  document.querySelectorAll('button').forEach(b => b.disabled = true);
+  try {
+    const opciones = { method: metodo };
+    if (datos) {
+      opciones.headers = { 'Content-Type': 'application/json' };
+      opciones.body = JSON.stringify(datos);
+    }
+    // fetch envía la petición; await espera sin bloquear la interfaz.
+    const respuesta = await fetch('/empleados', opciones);
+    const resultado = await respuesta.json();
+    trafico.textContent = `${metodo} /empleados\n` +
+      (datos ? `Cuerpo: ${JSON.stringify(datos, null, 2)}\n\n` : '\n') +
+      `HTTP ${respuesta.status}\n${JSON.stringify(resultado, null, 2)}`;
+    // fetch no lanza una excepción automáticamente por un error HTTP.
+    if (!respuesta.ok) throw new Error(`La API respondió HTTP ${respuesta.status}. Mira el detalle.`);
+    estado.textContent = `Petición completada: HTTP ${respuesta.status}.`;
+    return resultado;
+  } catch (error) {
+    estado.textContent = `${error.message}. Comprueba que REST siga encendido y abre esta página desde /web/demo.html.`;
+    return null;
+  } finally {
+    document.querySelectorAll('button').forEach(b => b.disabled = false);
+  }
+}
+
+document.querySelector('#cargar').addEventListener('click', async () => {
+  const empleados = await pedir('GET');
+  if (!empleados) return;
+  filas.replaceChildren();
+  for (const empleado of empleados) {
+    const fila = document.createElement('tr');
+    for (const campo of ['id', 'nombre', 'puesto', 'salario']) {
+      const celda = document.createElement('td');
+      celda.textContent = empleado[campo];
+      fila.append(celda);
+    }
+    filas.append(fila);
+  }
+});
+
+document.querySelector('#formulario').addEventListener('submit', async (evento) => {
+  evento.preventDefault();
+  await pedir('POST', {
+    nombre: document.querySelector('#nombre').value,
+    puesto: document.querySelector('#puesto').value,
+    salario: Number(document.querySelector('#salario').value),
+  });
+});
+</script>
+</html>

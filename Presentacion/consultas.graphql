@@ -1,0 +1,40 @@
+# Ejecuta UNA operación cada vez en http://127.0.0.1:8002/graphql
+
+query SoloNombres {
+  empleados {
+    nombre
+  }
+}
+
+query TodosLosCampos {
+  empleados {
+    id
+    nombre
+    puesto
+    salario
+  }
+}
+
+query UnEmpleado {
+  empleado(id: 1) {
+    nombre
+    puesto
+  }
+}
+
+mutation CrearEmpleado {
+  crearEmpleado(datos: {
+    nombre: "Marta Ruiz"
+    puesto: "Analista"
+    salario: 6000
+  }) {
+    id
+    nombre
+  }
+}
+
+query NoExiste {
+  empleado(id: 999) {
+    nombre
+  }
+}
